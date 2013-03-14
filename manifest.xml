@@ -1,0 +1,18 @@
+<package>
+  <description brief="vp_ardrone1">
+
+     vp_ardrone1
+
+  </description>
+  <author>petin</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/vp_ardrone1</url>
+  <depend package="std_msgs"/>
+  <depend package="rospy"/>
+  <depend package="ardrone_autonomy"/>
+  <depend package="joy"/>
+
+</package>
+
+

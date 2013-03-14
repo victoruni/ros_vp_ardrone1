@@ -1,0 +1,11 @@
+  def parse(line):
+  params = [param.lower() for param in line.split() if param]
+  commands = {
+  'play': 'audacious2 -p',
+  'silence': 'audacious2 -u',
+  'next': 'audacious2 -f',
+  'prev': 'audacious2 -r',
+  }
+  if params[1] in commands: os.popen(commands[params[1]])
+
+

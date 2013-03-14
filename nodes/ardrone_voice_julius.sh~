@@ -1,0 +1,6 @@
+#!/bin/bash
+
+while [ true ]; do
+     padsp julius -quiet -input rawfile -filelist /home/petin/ros_pkgs/vp_ardrone1/nodes/voice.wav -C /home/petin/julius-grammar/julian.jconf
+done
+

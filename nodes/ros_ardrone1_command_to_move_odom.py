@@ -1,0 +1,67 @@
+#!/usr/bin/env python
+#-*-coding:utf-8 -*-
+
+# 
+#  Слушатель ros_ardrone1_sub_voice
+#  чтение сообщений из темы ardrone1_command (строка голосовой команды)
+#  и отправка команд и установка параметров
+#  для управления ardrone 2.0
+#  или iRobotCreate
+
+
+import roslib; roslib.load_manifest('vp_ardrone1')
+import rospy
+import subprocess
+import shlex
+
+from ardrone_autonomy.msg import *
+from ardrone_autonomy.srv import *
+from std_msgs.msg import String
+from std_msgs.msg import Empty
+from std_msgs.msg import Int32
+from geometry_msgs.msg import Twist
+
+
+def controller(data):
+
+    if(data.data>0):
+      command = data.data
+      ### вперед, назад, влево, вправо, поворот, вверх, вниз, медленнее, быстрее
+    if(command/100000==1):  # ArDrone 2.0
+      if((command%1000)/100>0):  # 
+        go=True
+        while go==True:
+          params1=rospy.get_param("ardrone1_name")
+          params2=rospy.get_param("ardrone1_do")
+          params3=rospy.get_param("ardrone1_digit")
+          fb=params3[params1-1][0]-params3[params1-1][1]
+          rl=params3[params1-1][2]-params3  [params1-1][3]
+          ud=params3[params1-1][4]-params3[params1-1][5]
+          tt=params3[params1-1][6]
+          if(abs(fb)>0.0 or abs(rl)>0.0 or abs(ud)>0.0 or abs(tt)>0.0):
+            go=True
+          else:
+            go=False
+          pub3=rospy.Publisher('cmd_vel', Twist)
+          odom=Twist()
+          odom.linear.x=fb
+          odom.linear.y=rl
+          odom.linear.z=ud
+          odom.angular.x=0.0
+          odom.angular.y=0.0
+          odom.angular.z=tt
+          pub3.publish(odom)
+          rospy.loginfo("движение!!!!")
+        rospy.loginfo("конец движения!!!!")
+
+    elif(command/100000==2):  # iRobot
+      rospy.loginfo("iRorot Robert")
+      
+def listener():
+   rospy.init_node('ros_ardrone1_command_odom')
+   sub = rospy.Subscriber("ardrone1_command",Int32,controller)
+   rospy.spin()
+ 
+if __name__ == '__main__':
+   listener()
+   
